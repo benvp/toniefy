@@ -1,0 +1,11 @@
+.heading-1 {
+  @apply text-3xl font-bold text-gray-600;
+}
+
+.heading-2 {
+  @apply font-extrabold text-xl text-gray-800;
+}
+
+.heading-3 {
+  @apply font-bold text-gray-700;
+}

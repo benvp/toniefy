@@ -1,0 +1,18 @@
+<%= if live_flash(@flash, :info) do %>
+  <div class="flash flash--info mb-2">
+    <i class="flash__icon fas fa-info-circle"></i>
+    <div class="flash__content">
+      <p class="flash__message"><%= live_flash(@flash, :info) %></p>
+    </div>
+  </div>
+<% end %>
+
+<%= if live_flash(@flash, :error) do %>
+  <div class="flash flash--error mb-2">
+    <i class="flash__icon fas fa-exclamation-circle"></i>
+    <div class="flash__content">
+      <p class="flash__title">Es ist ein Fehler aufgetreten.</p>
+      <p class="flash__message"><%= live_flash(@flash, :error) %></p>
+    </div>
+  </div>
+<% end %>

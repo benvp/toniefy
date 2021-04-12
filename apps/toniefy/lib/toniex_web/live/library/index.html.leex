@@ -1,0 +1,149 @@
+<%= if @live_action == :index do %>
+  <%= if @job_status && !@has_completed_sessions do %>
+    <div class="library__recording-card">
+      <div class="flex">
+        <div class="flex justify-center items-center w-16 h-16 bg-white rounded-2xl">
+          <%= img_tag Routes.static_path(@socket, "/images/recording.svg"), class: "w-10 h-10" %>
+        </div>
+        <div class="mx-4">
+          <p class="font-bold text-white">Aufnahme läuft</p>
+          <p class="font-semibold text-sm text-white">
+            <%= @job_status.message %>
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center">
+       <!--
+        <button data-confirm="Bist du dir sicher?" phx-click="cancel-recording" type="button" class="btn btn-secondary">
+          Abbrechen
+        </button>
+        -->
+      </div>
+    </div>
+  <% end %>
+
+  <%= if @has_completed_sessions do %>
+    <div class="library__recording-card">
+      <div class="flex">
+
+        <div class="flex justify-center items-center w-16 h-16 bg-white rounded-2xl">
+          <i class="fas fa-gift text-4xl text-primary-main"></i>
+        </div>
+        <div class="ml-4">
+          <p class="font-bold text-white">Aufnahme erfolgreich.</p>
+          <p class="font-semibold text-sm text-white max-w-lg">
+            Deine Aufnahme wurde erfolgreich abgeschlossen. Füge Sie nun deiner Bibliothek hinzu.
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center">
+        <%= live_patch "Hinzufügen", to: Routes.live_path(@socket, ToniexWeb.ReviewSessionLive), class: "btn btn-secondary" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= if @upload_job_status do %>
+    <div class="library__recording-card">
+      <div class="flex">
+        <div class="flex justify-center items-center w-16 h-16 bg-white rounded-2xl">
+          <i class="fas fa-cloud-upload-alt text-4xl text-primary-main"></i>
+        </div>
+        <div class="mx-4">
+          <p class="font-bold text-white">Übertragung läuft</p>
+          <p class="font-semibold text-sm text-white">
+            <%= @upload_job_status.message %>
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center">
+        <!-- cancel button-->
+      </div>
+    </div>
+  <% end %>
+
+  <section class="mt-16">
+    <div class="flex items-center">
+      <h2 class="font-extrabold text-xl text-gray-800">Meine Bibliothek</h2>
+      <%= unless Enum.count(@playlists) === 0 do %>
+        <%= live_patch to: Routes.live_path(@socket, ToniexWeb.RecorderLive), class: "ml-4 library__btn-record", disabled: @has_completed_sessions do %>
+          <i class="fas fa-plus text-white"></i>
+          <span class="ml-1">Neue Aufnahme</span>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="grid grid-cols-1 gap-4 mt-4">
+      <%= if Enum.count(@playlists) === 0 do %>
+        <div class="flex justify-center items-center p-4 rounded-2xl bg-gray-200 border border-gray-300">
+          <div class="text-center max-w-sm py-32">
+            <p class="text-3xl font-bold text-gray-600">Ganz schön ruhig hier.</p>
+            <p class="mt-2 mb-10 font-semibold text-gray-400">Starte jetzt eine neue Aufnahme und schon bald kannst du loshören.</p>
+            <%= live_patch to: Routes.live_path(@socket, ToniexWeb.RecorderLive), class: "library__btn-record" do %>
+              <i class="fas fa-plus text-white"></i>
+              <span class="ml-1">Neue Aufnahme</span>
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <%= for playlist <- @playlists do %>
+          <%= live_patch to: Routes.library_index_path(@socket, :show, playlist.id) do %>
+            <div class="flex justify-between items-center p-4 rounded-2xl bg-white shadow transition hover:shadow-lg">
+              <div class="flex">
+                <div class="flex justify-center items-center w-14 h-14 bg-primary-main rounded-2xl">
+                  <i class="fas fa-music text-2xl text-white"></i>
+                </div>
+                <div class="ml-4">
+                  <p class="font-semibold"><%= playlist.title %></p>
+                  <p class="font-semibold text-sm text-gray-500 truncate">
+                    <%= Enum.count(playlist.tracks) %> songs
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-center">
+                <!--  <button type="button" class="btn btn-secondary--elevated">Übertragen</button> -->
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+<% end %>
+
+<%= if @live_action == :show do %>
+  <%= live_patch to: Routes.library_index_path(@socket, :index), class: "link link__back" do %>
+    <i class="fas fa-arrow-left"></i>
+  <% end %>
+
+  <h2 class="mt-6 heading-2">Auf tonie übertragen</h2>
+  <p class="text-gray-600 text-sm">Bitte beachte, dass alle aktuellen Inhalte deines Tonies bei der Übertragung überschrieben werden.</p>
+  <%= if @creative_tonies do %>
+    <%= f = form_for :upload_to, "#", [phx_submit: :save_to_tonie] %>
+      <%= select f, :id, Enum.map(@creative_tonies, &{"#{&1["name"]} (#{&1["chaptersPresent"]} / #{&1["chaptersRemaining"]} Kapitel)", &1["id"]}), required: true, prompt: "Tonie auswählen", class: "select w-full mt-2" %>
+
+      <div class="flex justify-end">
+        <%= submit "Übertragen", phx_disable_with: "Übertrage...", class: "btn btn-primary mt-4" %>
+      </div>
+    </form>
+  <% else %>
+    <div class="flash flash--info mt-4">
+      <div class="flash__content">
+        <p class="text-sm">
+          Für die Übertragung wird ein verbundener meinetonies Account benötigt.
+          <%= link "Einstellungen", to: Routes.user_settings_path(@socket, :edit), class: "link" %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+
+  <h2 class="mt-6 heading-2"><%= @playlist.title %></h2>
+
+  <%= live_component @socket, PlaylistComponent, tracks: @playlist.tracks %>
+
+  <div class="mt-4 mr-1 text-right">
+    <button data-confirm="Bist du dir sicher?" phx-click="delete-playlist" type="button" class="link-secondary">
+      Playlist löschen
+    </button>
+  </div>
+<% end %>

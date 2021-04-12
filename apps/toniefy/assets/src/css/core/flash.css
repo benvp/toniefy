@@ -1,0 +1,35 @@
+.flash {
+  @apply flex p-4 rounded-xl;
+}
+
+.flash--error {
+  @apply flex p-4 bg-red-100 border-red-200 border;
+
+  & .flash__title,
+  & .flash__message,
+  & .flash__icon {
+    @apply text-red-900;
+  }
+}
+
+.flash--info {
+  @apply flex p-4 bg-blue-100 border-blue-200 border;
+
+  & .flash__title,
+  & .flash__message,
+  & .flash__icon {
+    @apply text-blue-800;
+  }
+}
+
+.flash__content {
+  @apply ml-2;
+}
+
+.flash__title {
+  @apply  text-sm font-bold;
+}
+
+.flash__message {
+  @apply text-sm;
+}

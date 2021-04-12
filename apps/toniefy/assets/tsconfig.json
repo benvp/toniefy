@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noUnusedLocals": false,
+    "jsx": "preserve",
+    "paths": {
+      "~lib/*": ["src/lib/*"],
+      "~/*": ["./src/*"]
+    }
+  },
+  "exclude": ["node_modules"],
+  "include": [
+    ".eslintrc.js",
+    "babel.config.js",
+    "postcss.config.js",
+    "tailwind.config.js",
+    "webpack.config.js",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
+}

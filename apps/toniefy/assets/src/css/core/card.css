@@ -1,0 +1,11 @@
+.card {
+  @apply p-6 rounded-2xl bg-white shadow-sm;
+}
+
+.card__title {
+  @apply font-extrabold text-xl text-gray-800;
+}
+
+.card__body {
+  @apply mt-2 text-gray-700;
+}

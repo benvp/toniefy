@@ -1,0 +1,10 @@
+<script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/record.js") %>"></script>
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
+
+<div id="player-info" data-info="<%= @player_info %>"></div>
+<div id="player-state" data-state=""></div>
+<div id="player-error" data-error=""></div>
+
+<section>
+  <p>Recording...</p>
+</section>

@@ -1,0 +1,28 @@
+<div class="card max-w-lg m-auto">
+  <h2 class="card__title">Lege dein neues Passwort fest.</h2>
+  <div class="card__body">
+    <%= form_for @changeset, Routes.user_reset_password_path(@conn, :update, @token), fn f -> %>
+      <div class="mt-4">
+        <div>
+          <%= label f, :password, "Neues Passwort", class: "label" %>
+          <%= password_input f, :password, required: true, class: "input w-full" %>
+          <p class="label--error">
+            <%= error_tag f, :password %>
+          </p>
+        </div>
+
+        <div class="mt-2">
+          <%= label f, :password_confirmation, "Neues Passwort bestätigen", class: "label" %>
+          <%= password_input f, :password_confirmation, required: true, class: "input w-full" %>
+          <p class="label--error">
+            <%= error_tag f, :password_confirmation %>
+          </p>
+        </div>
+
+        <div class="mt-6 text-right">
+          <%= submit "Speichern", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

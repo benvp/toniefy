@@ -1,0 +1,20 @@
+.library__recording-card {
+  @apply flex justify-between items-center mt-10 py-4 px-6 rounded-2xl bg-primary-main;
+
+  background: linear-gradient(135deg, rgba(247,70,70,1) 0%, rgba(255,109,132,1) 100%);
+
+  box-shadow:
+    0 1px 8px hsla(0, 0%, 0%, 0.08),
+    0 24px 64px hsla(360, 45%, 50%, 0.75);
+}
+
+.library__btn-record {
+  @apply inline-block py-2 px-4 text-white text-sm font-bold rounded-full transition duration-150 ease-in-out;
+
+  background: linear-gradient(135deg, rgba(247,70,70,1) 0%, rgba(255,109,132,1) 100%);
+}
+
+.library__btn-record:hover {
+  box-shadow: 0 0 0 2px #ffa7bb;
+  background: linear-gradient(135deg, rgba(247,70,70,1) 0%, rgba(255,109,132,1) 100%);
+}

@@ -1,0 +1,37 @@
+<div class="card max-w-lg m-auto">
+  <h2 class="card__title">Logge dich bei meinetonies ein</h2>
+  <div class="card__body">
+    <p class="mt-1 text-sm text-gray-500">
+      Leider gibt es derzeit keine andere Möglichkeit sich mit meinetonies zu verbinden.
+      Wir speichern dein Passwort aber in keinem Fall und verwenden es ausschließlich um
+      eine Verbindung mit meinetonies herzustellen.
+    </p>
+
+    <%= if @error_message do %>
+      <div class="flash flash--error mt-4">
+        <i class="flash__icon fas fa-exclamation-circle"></i>
+        <div class="flash__content">
+          <p class="flash__message"><%= @error_message %></p>
+        </div>
+      </div>
+    <% end %>
+
+    <%= form_for @conn, @callback_url, fn f -> %>
+      <div class="mt-4">
+        <div>
+          <%= label f, :username, "Benutzername", class: "label" %>
+          <%= email_input f, :username, required: true, class: "input w-full" %>
+        </div>
+
+        <div class="mt-2">
+          <%= label f, :password, "Passwort", class: "label" %>
+          <%= password_input f, :password, required: true, class: "input w-full" %>
+        </div>
+
+        <div class="mt-6 text-right">
+          <%= submit "Login mit meinetonies", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

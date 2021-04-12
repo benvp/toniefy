@@ -1,0 +1,113 @@
+<div class="card max-w-lg m-auto">
+  <h2 class="card__title">Einstellungen</h2>
+  <div class="card__body">
+    <p>Hier kannst du dein Benutzerprofil anpassen.</p>
+
+    <div class="mt-6">
+      <h3 class="heading-3 pb-1 border-b border-gray-200">
+        Verbundene Dienste
+      </h3>
+
+      <div class="mt-2">
+        <%= if spotify = Enum.find(@connected_services, & &1.provider == :spotify) do %>
+          <%= form_for @conn, Routes.user_settings_path(@conn, :disconnect_service), [method: "DELETE"], fn f -> %>
+            <%= hidden_input f, :provider, name: "provider", value: "spotify" %>
+            <p>
+              <span class="font-semibold">Spotify:</span>
+              <%= spotify.username %>
+              <span class="ml-1"><%= submit "(trennen)", class: "link link-secondary text-xs" %></span>
+            </p>
+          <% end %>
+        <% end %>
+        <%= if tonies = Enum.find(@connected_services, & &1.provider == :tonies) do %>
+          <%= form_for @conn,  Routes.user_settings_path(@conn, :disconnect_service), [method: "DELETE"], fn f -> %>
+            <%= hidden_input f, :provider, name: "provider", value: "tonies" %>
+            <p>
+              <span class="font-semibold">meinetonies:</span>
+              <%= tonies.username %>
+              <span class="ml-1"><%= submit "(trennen)", class: "link link-secondary text-xs" %></span>
+            </p>
+          <% end %>
+        <% end %>
+        <%= unless Enum.find(@connected_services, & &1.provider == :spotify) do %>
+          <%= link "Verbinde deinen Spotify Account.", to: Routes.user_session_path(@conn, :request, :spotify), class: "block link" %>
+        <% end %>
+        <%= unless Enum.find(@connected_services, & &1.provider == :tonies) do %>
+          <%= link "Verbinde deinen meinetonies Account.", to: Routes.user_session_path(@conn, :request, :tonies), class: "block link" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <h3 class="heading-3 pb-1 border-b border-gray-200">
+        E-Mail Adresse ändern
+      </h3>
+      <%= form_for @email_changeset, Routes.user_settings_path(@conn, :update), fn f -> %>
+        <div class="mt-2">
+          <%= hidden_input f, :action, name: "action", value: "update_email" %>
+
+          <div>
+            <%= label f, :email, "E-Mail", class: "label" %>
+            <%= email_input f, :email, required: true, class: "input w-full" %>
+            <p class="label--error">
+              <%= error_tag f, :email %>
+            </p>
+          </div>
+
+          <div class="mt-2">
+            <%= label f, :current_password, "Aktuelles Passwort", for: "current_password_for_email", class: "label" %>
+            <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email", class: "input w-full" %>
+            <p class="label--error">
+              <%= error_tag f, :current_password %>
+            </p>
+          </div>
+
+          <div class="mt-6 text-right">
+            <%= submit "Speichern", class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-8">
+      <h3 class="heading-3 pb-1 border-b border-gray-200">
+        Passwort ändern
+      </h3>
+      <%= form_for @password_changeset, Routes.user_settings_path(@conn, :update), fn f -> %>
+        <div class="mt-2">
+          <%= hidden_input f, :action, name: "action", value: "update_password" %>
+
+          <div>
+            <%= label f, :password, "Neues Passwort", class: "label" %>
+            <%= password_input f, :password, required: true, class: "input w-full" %>
+            <p class="label--error">
+              <%= error_tag f, :password %>
+            </p>
+          </div>
+
+          <div class="mt-2">
+            <%= label f, :password_confirmation, "Neues Passswort wiederholen", class: "label" %>
+            <%= password_input f, :password_confirmation, required: true, class: "input w-full" %>
+            <p class="label--error">
+              <%= error_tag f, :password_confirmation %>
+            </p>
+          </div>
+
+          <div class="mt-2">
+            <%= label f, :current_password, "Aktuelles Passwort", for: "current_password_for_password", class: "label" %>
+            <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password", class: "input w-full" %>
+            <p class="label--error">
+              <%= error_tag f, :current_password %>
+            </p>
+          </div>
+
+          <div class="mt-6">
+            <div class="mt-6 text-right">
+              <%= submit "Speichern", class: "btn btn-primary" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

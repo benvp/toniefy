@@ -1,0 +1,37 @@
+<div class="card max-w-lg m-auto">
+  <h2 class="card__title">Registrierung</h2>
+  <p class="mt-1 text-sm text-gray-500">
+    Wir freuen uns, dass du dich bei toniefy registerst. Für die Registrierung benötigen wir
+    lediglich deine E-Mail Adresse und ein Passwort.
+  </p>
+  <div class="card__body">
+    <%= form_for @changeset, Routes.user_registration_path(@conn, :create), fn f -> %>
+      <div class="mt-4">
+        <div>
+          <%= label f, :email, "E-Mail", class: "label" %>
+          <%= email_input f, :email, required: true, class: "input w-full" %>
+          <p class="label--error">
+            <%= error_tag f, :email %>
+          </p>
+        </div>
+
+        <div class="mt-2">
+          <%= label f, :password, "Passwort", class: "label" %>
+          <%= password_input f, :password, required: true, class: "input w-full" %>
+          <p class="label--error">
+            <%= error_tag f, :email %>
+          </p>
+        </div>
+
+        <div class="mt-2">
+          <%= label f, :invite_code, "Einladungscode", class: "label" %>
+          <%= text_input f, :invite_code, required: true, class: "input w-full", value: @invite_code %>
+        </div>
+
+        <div class="mt-6 text-right">
+          <%= submit "Registrieren", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="card max-w-lg m-auto">
+  <h2 class="card__title">Schön, dass du das bist.</h2>
+  <p class="mt-1 text-sm text-gray-500">
+    Bitte melde dich mit deinen Zugangsdaten an.
+  </p>
+  <div class="card__body">
+    <%= if @error_message do %>
+      <div class="flash flash--error mt-4">
+        <i class="flash__icon fas fa-exclamation-circle"></i>
+        <div class="flash__content">
+          <p class="flash__message"><%= @error_message %></p>
+        </div>
+      </div>
+    <% end %>
+
+    <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
+      <div class="mt-4">
+        <div>
+          <%= label f, :email, "E-Mail", class: "label" %>
+          <%= email_input f, :email, required: true, class: "input w-full" %>
+        </div>
+
+        <div class="mt-2">
+          <%= label f, :password, "Passwort", class: "label" %>
+          <%= password_input f, :password, required: true, class: "input w-full" %>
+        </div>
+
+        <div class="mt-2 flex items-center justify-between">
+          <div class="flex items-center">
+            <%= checkbox f, :remember_me, class: "checkbox"%>
+            <%= label f, :remember_me, "angemeldet bleiben", class: "ml-2 label" %>
+          </div>
+
+          <div class="text-sm leading-5">
+            <%= link "Passwort vergessen?", to: Routes.user_reset_password_path(@conn, :new), class: "link" %>
+          </div>
+        </div>
+
+        <div class="mt-6 text-right">
+          <%= submit "Einloggen", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+/* This file is for your main application css. */
+@import "nprogress/nprogress";
+
+/* Tailwind */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+
+@import "./core/nav";
+@import "./core/button";
+@import "./core/form";
+@import "./core/link";
+@import "./core/typography";
+@import "./core/card";
+@import "./core/flash";
+
+@import './library';
+
+@import "tailwindcss/utilities";
+
+#nprogress .bar {
+  @apply bg-primary-main;
+  height: 3px;
+}
+
+#nprogress .spinner {
+  display: none;
+}
+
+/* LiveView specific classes for your customizations */
+.phx-no-feedback.invalid-feedback,
+.phx-no-feedback .invalid-feedback {
+  display: none;
+}
+
+.phx-click-loading {
+  opacity: 0.5;
+  transition: opacity 1s ease-out;
+}
+
+.phx-disconnected{
+  cursor: wait;
+}
+.phx-disconnected *{
+  pointer-events: none;
+}
+
+.footer__link {
+  @apply text-gray-400 font-semibold;
+
+  &:hover {
+    @apply text-gray-500;
+  }
+}

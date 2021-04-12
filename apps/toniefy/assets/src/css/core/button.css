@@ -1,0 +1,47 @@
+.btn {
+  @apply font-bold text-sm py-2 px-4 rounded-full transition duration-150 ease-in-out;
+}
+
+/*
+ * Primary button
+ */
+
+.btn-primary {
+  @apply bg-primary-500 text-white;
+}
+
+.btn-primary:hover {
+  @apply bg-primary-400;
+}
+
+.btn-primary:focus {
+  @apply outline-none ring-primary-300 ring ring-offset-1 ring-offset-white;
+}
+
+.btn-primary:disabled {
+  @apply bg-gray-600 text-gray-700;
+}
+
+/*
+ * Secondary button
+ */
+
+.btn-secondary {
+  @apply bg-white text-gray-700 border border-gray-100 shadow-sm;
+}
+
+.btn-secondary:hover {
+  @apply text-gray-900;
+}
+
+
+.btn-secondary--elevated {
+  @apply bg-white text-gray-700 border border-gray-100 shadow-sm;
+}
+
+.btn-secondary--elevated:hover {
+  box-shadow:
+    0 10px 18px -6px hsla(360, 80%, 70%, 0.3);
+
+  @apply text-gray-900;
+}

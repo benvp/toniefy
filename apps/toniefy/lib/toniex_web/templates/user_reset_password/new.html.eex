@@ -1,0 +1,20 @@
+<div class="card max-w-lg m-auto">
+  <h2 class="card__title">Passwort zurücksetzen</h2>
+  <p class="mt-1 text-sm text-gray-500">
+    Fordere ein neues Passwort an.
+  </p>
+  <div class="card__body">
+    <%= form_for :user, Routes.user_reset_password_path(@conn, :create), fn f -> %>
+      <div class="mt-4">
+        <div>
+          <%= label f, :email, "E-Mail", class: "label" %>
+          <%= email_input f, :email, required: true, class: "input w-full" %>
+        </div>
+
+        <div class="mt-6 text-right">
+          <%= submit "Passwort anfordern", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

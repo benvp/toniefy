@@ -1,0 +1,26 @@
+<header class="max-w-screen-md mx-auto py-6 px-4 md:px-0">
+  <nav class="flex justify-between items-center">
+    <%= live_patch to: Routes.page_path(@conn, :index) do %>
+      <%= img_tag Routes.static_path(@conn, "/images/toniefy-logo.svg") %>
+    <% end %>
+    <div class="space-x-8">
+      <%= if @current_user do %>
+        <%= live_patch "Meine Bibliothek", to: Routes.library_index_path(@conn, :index), class: active_class(@conn.request_path, Routes.library_index_path(@conn, :index), "header__nav-link", "header__nav-link--active") %>
+        <%= link "Henris Spardose", to: Routes.page_path(@conn, :donate), class: active_class(@conn.request_path, Routes.page_path(@conn, :donate), "header__nav-link", "header__nav-link--active") %>
+        <%= link "Einstellungen", to: Routes.user_settings_path(@conn, :edit), class: active_class(@conn.request_path, Routes.user_settings_path(@conn, :edit), "header__nav-link", "header__nav-link--active") %>
+        <%= link "Logout", to: Routes.user_session_path(@conn, :delete), method: :delete, class: "header__nav-link" %>
+        <% else %>
+        <%= link "Login", to: Routes.user_session_path(@conn, :new), class: "header__nav-link" %>
+      <% end %>
+    </div>
+  </nav>
+</header>
+<main class="max-w-screen-md min-h-screen mt-6 mx-auto">
+  <%= render "_flash.html", assigns %>
+  <%= @inner_content %>
+</main>
+<footer class="flex justify-center sm:justify-end items-end px-4 py-6 mt-8 mx-auto space-x-6 max-w-screen-md">
+  <p class="text-sm"><%= link "Datenschutz", to: Routes.page_path(@conn, :privacy), class: "footer__link" %></p>
+  <p class="text-sm"><%= link "Kontakt", to: "mailto:ben@vp.solutions?subject=Toniefy Kontakt", class: "footer__link" %></p>
+  <p class="font-semibold text-sm text-gray-400">toniefy <span class="text-primary-main">|</span> 2021</p>
+</footer>

@@ -1,0 +1,6 @@
+import Config
+
+config :toniex_recorder,
+  toniex_host: "http://localhost:4000",
+  record_token:
+    "SFMyNTY.g2gDdAAAAAJkAAV0b2tlbm0AAACcQlFDMnV4b25VZFptekFhMnZEVzNFb1l5VzhfaGQ1d002UEQ0V0Zoa1VYRUMzYjVxeFYyWGNxSDY4anlCX29WeEkwRFU3ck5ocHFYdVZjaG9rdTRPLXM0QXVsMWlqS01jWXZtMnBwYWpqclFlc1c1eWdZZUlONWVfbzJUQ2ItM2MyLTNiSTRlQ3B0VDdIVlJlS2I2Nk12cFlXWW1kZAADdXJpbQAAACRzcG90aWZ5OnRyYWNrOjJramxPWjEwWVBLM2RlTU40NWw0YlNuBgCSv8jndgFiAAFRgA.aOldUDINawWIYUfhc1vVooLpShh3pKTkfIjv7tfBd50"

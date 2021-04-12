@@ -1,0 +1,35 @@
+.label {
+  @apply block text-sm leading-8 font-semibold text-gray-700;
+}
+
+.input {
+  @apply block bg-white border-gray-300 text-gray-700 pt-2 pb-2 pl-3 pr-3 shadow-sm border rounded-md leading-normal text-base;
+
+  &:focus {
+    @apply border-primary-300 ring-primary-300;
+  }
+
+  &::placeholder {
+    @apply text-gray-300;
+  }
+}
+
+.label--error {
+  @apply mt-1 text-sm text-error;
+}
+
+.checkbox {
+  @apply h-4 w-4 text-primary-600 border-gray-300 transition rounded duration-150 ease-in-out;
+}
+
+.select {
+  @apply block pl-3 pr-10 py-2 text-base font-semibold rounded-md border border-gray-300 text-gray-700;
+
+  &:focus {
+    @apply border-primary-300 ring-primary-300;
+  }
+
+  &::placeholder {
+    @apply text-gray-300;
+  }
+}

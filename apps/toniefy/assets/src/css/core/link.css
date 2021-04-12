@@ -1,0 +1,23 @@
+.link {
+  @apply text-primary-600 font-semibold transition ease-in-out duration-150;
+
+  &:hover {
+    @apply text-primary-500;
+  }
+
+  &:focus {
+    @apply outline-none;
+  }
+
+  &.link__back {
+    @apply inline-block px-4 py-1 rounded-full bg-white;
+  }
+}
+
+.link-secondary {
+  @apply text-gray-600 font-semibold;
+
+  &:hover {
+    @apply text-gray-700;
+  }
+}
