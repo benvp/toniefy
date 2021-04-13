@@ -15,7 +15,7 @@ alias Toniex.Library
 
 {:ok, user} =
   Accounts.register_user(%{
-    email: "ben@vp.solutions",
+    email: "test@yourdomain.com",
     password: "test1234"
   })
 

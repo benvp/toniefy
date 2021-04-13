@@ -118,6 +118,9 @@ defmodule ToniexWeb.RecorderLive do
             <%= f = form_for :recorder, "#", [phx_submit: :record] %>
               <%= text_input f, :uri, required: true, class: "input w-full text-xl py-3", placeholder: "spotify:awesome-track" %>
 
+              <p class="mt-2">
+                <%= link "Wo finde ich die Spotify URI?", to: Routes.static_path(@socket, "/images/how-to-get-spotify-uri.gif"), target: "_blank", class: "link" %>
+              </p>
               <div class="text-right mt-6">
                 <%= submit "Aufnahme starten", phx_disable_with: "Laden...", class: "btn btn-primary" %>
               </div>
