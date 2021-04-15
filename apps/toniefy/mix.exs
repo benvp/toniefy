@@ -34,7 +34,7 @@ defmodule Toniex.MixProject do
   defp deps do
     [
       {:argon2_elixir, "~> 2.0"},
-      {:bamboo, "~> 2.0.0"},
+      {:bamboo, "~> 2.1.0"},
       {:ecto_sql, "~> 3.4"},
       {:floki, ">= 0.27.0", only: :test},
       {:gettext, "~> 0.11"},

@@ -78,22 +78,14 @@ defmodule ToniexWeb.RecorderLive do
         socket = push_redirect(socket, to: Routes.library_index_path(socket, :index))
         {:noreply, socket}
 
-      {:error, :invalid_uri} ->
+      {:error, reason} ->
+        IO.inspect(reason)
+
         socket =
           put_flash(
             socket,
             :error,
-            "Bitte gib eine gültige Spotify URI ein."
-          )
-
-        {:noreply, socket}
-
-      {:error, _reason} ->
-        socket =
-          put_flash(
-            socket,
-            :error,
-            "Oh nein. Es ist ein Fehler aufgetreten. Bitte versuche es nochmal."
+            get_error_message(reason)
           )
 
         {:noreply, socket}
@@ -122,7 +114,7 @@ defmodule ToniexWeb.RecorderLive do
                 <%= link "Wo finde ich die Spotify URI?", to: Routes.static_path(@socket, "/images/how-to-get-spotify-uri.gif"), target: "_blank", class: "link" %>
               </p>
               <div class="text-right mt-6">
-                <%= submit "Aufnahme starten", phx_disable_with: "Laden...", class: "btn btn-primary" %>
+                <%= submit "Aufnahme starten", phx_disable_with: "Aufnahme starten...", class: "btn btn-primary" %>
               </div>
             </form>
           </div>
@@ -130,4 +122,14 @@ defmodule ToniexWeb.RecorderLive do
       </div>
     """
   end
+
+  defp get_error_message(:invalid_uri), do: "Bitte gib eine gültige Spotify URI ein."
+
+  defp get_error_message(:max_duration_exceeded),
+    do: "Das Album oder die Playlist darf maximal 89 Minuten lang sein."
+
+  defp get_error_message(:not_found), do: "Die URI konnte nicht gefunden werden."
+
+  defp get_error_message(_reason),
+    do: "Oh nein. Es ist ein Fehler aufgetreten. Bitte versuche es nochmal."
 end

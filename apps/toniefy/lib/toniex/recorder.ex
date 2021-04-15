@@ -1,17 +1,25 @@
 defmodule Toniex.Recorder do
   import Ecto.Query
 
-  alias Toniex.{Repo, JobStatus, Recorder}
+  alias Timex.Duration
+  alias Toniex.{Accounts, Repo, JobStatus, Recorder}
+  alias Toniex.Clients.Spotify
   alias Toniex.Recorder.Session
 
   require Logger
 
   @upload_dir Application.fetch_env!(:toniex, :upload_dir)
+  @spotify_uri_regex ~r/^spotify:(?<type>(playlist|album|track)):(?<id>[\w\d]+)$/
 
   @spec enqueue(Toniex.Accounts.User.t(), binary) ::
-          {:error, :invalid_uri | any} | {:ok, Oban.Job.t()}
+          {:error, :invalid_uri | :max_duration_exceeded | any} | {:ok, Oban.Job.t()}
   def enqueue(user, uri) do
-    if spotify_uri_valid?(uri) do
+    client =
+      Accounts.get_session(user, :spotify)
+      |> Spotify.client()
+
+    with true <- spotify_uri_valid?(uri),
+         :ok <- spotify_validate_duration(client, uri) do
       %{
         id: Ecto.UUID.generate(),
         user_id: user.id,
@@ -34,7 +42,8 @@ defmodule Toniex.Recorder do
           other
       end
     else
-      {:error, :invalid_uri}
+      false -> {:error, :invalid_uri}
+      error -> error
     end
   end
 
@@ -122,7 +131,28 @@ defmodule Toniex.Recorder do
   end
 
   defp spotify_uri_valid?(uri) do
-    spotify_regex = ~r/^spotify:(playlist|album|track):[\w\d]+$/
-    String.match?(uri, spotify_regex)
+    String.match?(uri, @spotify_uri_regex)
+  end
+
+  defp spotify_validate_duration(client, uri) do
+    case Spotify.total_duration(client, uri) do
+      {:ok, duration_ms} ->
+        duration_minutes =
+          duration_ms
+          |> Duration.from_milliseconds()
+          |> Duration.to_minutes()
+
+        if duration_minutes <= 89 do
+          :ok
+        else
+          {:error, :max_duration_exceeded}
+        end
+
+      {:error, %{"error" => %{"status" => 404}}} ->
+        {:error, :not_found}
+
+      other ->
+        other
+    end
   end
 end
