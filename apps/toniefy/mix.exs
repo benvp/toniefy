@@ -38,7 +38,7 @@ defmodule Toniex.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:floki, ">= 0.27.0", only: :test},
       {:gettext, "~> 0.11"},
-      {:hackney, "~> 1.17.0"},
+      {:hackney, "~> 1.17.4"},
       {:httpoison, "~> 1.8.0"},
       {:jason, "~> 1.0"},
       {:mime, "~> 1.5.0"},

@@ -90,6 +90,7 @@ defmodule Toniex.Clients.Tonies do
            {"x-amz-credential", fields["x-amz-credential"]},
            {"x-amz-date", fields["x-amz-date"]},
            {"x-amz-signature", fields["x-amz-signature"]},
+           {"x-amz-security-token", fields["x-amz-security-token"]},
            {"policy", fields["policy"]},
            {:file, Path.expand(path),
             {"form-data",
