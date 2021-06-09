@@ -9,16 +9,16 @@ defmodule Toniex.Recorder do
   require Logger
 
   @upload_dir Application.fetch_env!(:toniex, :upload_dir)
-  @spotify_uri_regex ~r/^spotify:(?<type>(playlist|album|track)):(?<id>[\w\d]+)$/
 
   @spec enqueue(Toniex.Accounts.User.t(), binary) ::
           {:error, :invalid_uri | :max_duration_exceeded | any} | {:ok, Oban.Job.t()}
-  def enqueue(user, uri) do
+  def enqueue(user, uri_or_url) do
     client =
       Accounts.get_session(user, :spotify)
       |> Spotify.client()
 
-    with true <- spotify_uri_valid?(uri),
+    with true <- spotify_uri_valid?(uri_or_url),
+         uri <- Spotify.to_uri(uri_or_url),
          :ok <- spotify_validate_duration(client, uri) do
       %{
         id: Ecto.UUID.generate(),
@@ -130,8 +130,11 @@ defmodule Toniex.Recorder do
     Repo.delete(session)
   end
 
-  defp spotify_uri_valid?(uri) do
-    String.match?(uri, @spotify_uri_regex)
+  defp spotify_uri_valid?(uri_or_url) do
+    case Spotify.parse_uri(uri_or_url) do
+      m when is_map(m) -> true
+      _ -> false
+    end
   end
 
   defp spotify_validate_duration(client, uri) do

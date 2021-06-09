@@ -1,5 +1,6 @@
 defmodule Toniex.Clients.Spotify do
   @spotify_uri_regex ~r/^spotify:(?<type>(playlist|album|track)):(?<id>[\w\d]+)$/
+  @spotify_url_regex ~r/\/(?<type>(playlist|album|track))\/(?<id>[\w\d]+)/
 
   def get_token(refresh_token) do
     res =
@@ -35,7 +36,7 @@ defmodule Toniex.Clients.Spotify do
   end
 
   @doc """
-  Get the total duration of a Spotify URI. Returns
+  Get the total duration of a Spotify URI or URL. Returns
 
   Returns `{:ok, duration_ms}` or an error tuple `{:error, any()}`.
 
@@ -47,8 +48,8 @@ defmodule Toniex.Clients.Spotify do
   """
   @spec total_duration(Tesla.Client.t(), String.t()) ::
           {:ok, integer()} | {:error, :uri_not_supported | any()}
-  def total_duration(client, uri) do
-    %{type: type, id: id} = parse_uri(uri)
+  def total_duration(client, uri_or_url) do
+    %{type: type, id: id} = parse_uri(uri_or_url)
 
     case type do
       "track" ->
@@ -58,7 +59,7 @@ defmodule Toniex.Clients.Spotify do
         end
 
       "album" ->
-        case get_all_tracks(client, uri) do
+        case get_all_tracks(client, uri_or_url) do
           {:ok, tracks} ->
             duration =
               Enum.reduce(tracks, 0, fn track, duration ->
@@ -72,7 +73,7 @@ defmodule Toniex.Clients.Spotify do
         end
 
       "playlist" ->
-        case get_all_tracks(client, uri) do
+        case get_all_tracks(client, uri_or_url) do
           {:ok, tracks} ->
             duration =
               Enum.reduce(tracks, 0, fn track, duration ->
@@ -111,7 +112,7 @@ defmodule Toniex.Clients.Spotify do
           {:ok, list()} | {:error, any()}
   def get_all_tracks(
         client,
-        uri,
+        uri_or_url,
         tracks \\ [],
         page_url \\ ""
       )
@@ -126,11 +127,11 @@ defmodule Toniex.Clients.Spotify do
 
   def get_all_tracks(
         client,
-        uri,
+        uri_or_url,
         tracks,
         page_url
       ) do
-    %{id: id, type: type} = parse_uri(uri)
+    %{id: id, type: type} = parse_uri(uri_or_url)
 
     url =
       case type do
@@ -148,11 +149,39 @@ defmodule Toniex.Clients.Spotify do
 
     case result do
       {:ok, %{"items" => items, "next" => next}} ->
-        {:ok, page_tracks} = get_all_tracks(client, uri, items, next)
+        {:ok, page_tracks} = get_all_tracks(client, uri_or_url, items, next)
         {:ok, page_tracks ++ tracks}
 
       {:error, reason} ->
         {:error, reason}
+    end
+  end
+
+  @doc """
+  Parse a spotify URI or URL.
+  """
+  def parse_uri(uri_or_url) do
+    cond do
+      String.match?(uri_or_url, @spotify_uri_regex) ->
+        %{"id" => id, "type" => type} = Regex.named_captures(@spotify_uri_regex, uri_or_url)
+        %{id: id, type: type}
+
+      String.match?(uri_or_url, @spotify_url_regex) ->
+        %{"id" => id, "type" => type} = Regex.named_captures(@spotify_url_regex, uri_or_url)
+        %{id: id, type: type}
+
+      true ->
+        {:error, :invalid_uri_or_url}
+    end
+  end
+
+  @doc """
+  Converts a Spotify URL to an URI
+  """
+  def to_uri(url) do
+    case Regex.named_captures(@spotify_url_regex, url) do
+      %{"id" => id, "type" => type} -> "spotify:#{type}:#{id}"
+      _ -> {:error, :invalid_url}
     end
   end
 
@@ -163,11 +192,6 @@ defmodule Toniex.Clients.Spotify do
     client_secret = Keyword.fetch!(config, :client_secret)
 
     Base.encode64("#{client_id}:#{client_secret}")
-  end
-
-  defp parse_uri(uri) do
-    %{"id" => id, "type" => type} = Regex.named_captures(@spotify_uri_regex, uri)
-    %{id: id, type: type}
   end
 
   @spec handle_response(Tesla.Env.result()) :: {:ok, any()} | {:error, any()}

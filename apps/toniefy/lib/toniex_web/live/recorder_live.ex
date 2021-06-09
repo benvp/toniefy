@@ -105,13 +105,13 @@ defmodule ToniexWeb.RecorderLive do
       <div class="card">
         <h2 class="card__title">Neue Aufnahme starten</h2>
         <div class="card__body">
-          <p>Bitte gib eine Spotify URI in das Textfeld ein. Dies kann der Link zu einem einzelnen Lied, einer Playlist oder einem Album sein.</p>
+          <p>Bitte gib eine Spotify URL oder URI in das Textfeld ein. Dies kann der Link zu einem einzelnen Lied, einer Playlist oder einem Album sein.</p>
           <div class="mt-6">
             <%= f = form_for :recorder, "#", [phx_submit: :record] %>
               <%= text_input f, :uri, required: true, class: "input w-full text-xl py-3", placeholder: "spotify:awesome-track" %>
 
               <p class="mt-2">
-                <%= link "Wo finde ich die Spotify URI?", to: Routes.static_path(@socket, "/images/how-to-get-spotify-uri.gif"), target: "_blank", class: "link" %>
+                <%= link "Wo finde ich die Spotify URL?", to: Routes.static_path(@socket, "/images/how-to-get-spotify-uri.gif"), target: "_blank", class: "link" %>
               </p>
               <div class="text-right mt-6">
                 <%= submit "Aufnahme starten", phx_disable_with: "Aufnahme starten...", class: "btn btn-primary" %>
