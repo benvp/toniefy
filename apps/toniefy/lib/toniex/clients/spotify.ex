@@ -179,9 +179,16 @@ defmodule Toniex.Clients.Spotify do
   Converts a Spotify URL to an URI
   """
   def to_uri(url) do
-    case Regex.named_captures(@spotify_url_regex, url) do
-      %{"id" => id, "type" => type} -> "spotify:#{type}:#{id}"
-      _ -> {:error, :invalid_url}
+    cond do
+      String.match?(url, @spotify_uri_regex) ->
+        url
+
+      String.match?(url, @spotify_url_regex) ->
+        %{"id" => id, "type" => type} = Regex.named_captures(@spotify_url_regex, url)
+        "spotify:#{type}:#{id}"
+
+      true ->
+        {:error, :invalid_url}
     end
   end
 
