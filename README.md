@@ -1,9 +1,11 @@
 # toniefy.me - Spotify on your toniebox
 
-This is the main repository for [toniefy](https://toniefy.me) - a simple and seamless
+This is the main repository for toniefy - a simple and seamless
 way to transfer songs from your Spotify premium account to your [toniebox](https://tonies.com).
 
-Please keep in mind that depending on your region this might violate the Terms of Spotify.
+Please keep in mind that depending on your region this might violate the Terms of Spotify® and/or of tonies®.
+I'm whether related to either Spotify® or tonies® and just a fan who thought sharing a way to transfer some songs
+could help some people.
 
 Consider it as open-source but don't expect the quality of a well-managed open source project.
 I just don't see any point of hiding the source code as it's a somewhat fancy, creative architecture
