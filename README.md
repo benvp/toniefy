@@ -1,4 +1,4 @@
-# toniefy.me - Spotify on your toniebox
+# toniefy - Spotify® on your toniebox
 
 This is the main repository for toniefy - a simple and seamless
 way to transfer songs from your Spotify premium account to your [toniebox](https://tonies.com).
