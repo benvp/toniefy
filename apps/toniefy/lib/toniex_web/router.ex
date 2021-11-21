@@ -20,8 +20,6 @@ defmodule ToniexWeb.Router do
   scope "/", ToniexWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
-
     get "/record", RecordController, :index
     get "/privacy", PageController, :privacy
     get "/piggy-bank", PageController, :donate
@@ -60,8 +58,8 @@ defmodule ToniexWeb.Router do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     # we disable registration for now
-    get "/register", UserRegistrationController, :new
-    post "/register", UserRegistrationController, :create
+    # get "/register", UserRegistrationController, :new
+    # post "/register", UserRegistrationController, :create
 
     get "/login", UserSessionController, :new
     post "/login", UserSessionController, :create
@@ -71,19 +69,23 @@ defmodule ToniexWeb.Router do
     put "/reset-password/:token", UserResetPasswordController, :update
   end
 
-  scope "/", ToniexWeb do
-    pipe_through [:browser, :require_authenticated_user]
+  live_session :authenticated, on_mount: [{ToniexWeb.LiveAuth, :require_authenticated_user}] do
+    scope "/", ToniexWeb do
+      pipe_through [:browser, :require_authenticated_user]
 
-    get "/me", UserSettingsController, :edit
-    put "/me/change-password", UserSettingsController, :update
-    put "/me/change-email", UserSettingsController, :update
-    get "/me/confirm-email/:token", UserSettingsController, :confirm_email
-    delete "/me/disconnect-service", UserSettingsController, :disconnect_service
+      live "/", PageLive, :index
 
-    live "/library", LibraryLive.Index, :index
-    live "/library/record", RecorderLive
-    live "/library/record/review", ReviewSessionLive
-    live "/library/:id", LibraryLive.Index, :show
+      get "/me", UserSettingsController, :edit
+      put "/me/change-password", UserSettingsController, :update
+      put "/me/change-email", UserSettingsController, :update
+      get "/me/confirm-email/:token", UserSettingsController, :confirm_email
+      delete "/me/disconnect-service", UserSettingsController, :disconnect_service
+
+      live "/library", LibraryLive.Index, :index
+      live "/library/record", RecorderLive
+      live "/library/record/review", ReviewSessionLive
+      live "/library/:id", LibraryLive.Index, :show
+    end
   end
 
   scope "/", ToniexWeb do

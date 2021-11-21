@@ -29,9 +29,7 @@ defmodule ToniexWeb.ReviewSessionLive do
       socket
       |> put_flash(
         :success,
-        "#{Enum.count(socket.assigns.session.tracks)} songs have been added to playlist \"#{
-          playlist.title
-        }\"."
+        "#{Enum.count(socket.assigns.session.tracks)} songs have been added to playlist \"#{playlist.title}\"."
       )
       |> push_redirect(to: Routes.library_index_path(socket, :index))
 
@@ -72,7 +70,7 @@ defmodule ToniexWeb.ReviewSessionLive do
       </p>
 
       <div class="mt-4">
-        <%= live_component @socket, PlaylistComponent, tracks: @session.tracks %>
+        <%= live_component PlaylistComponent, tracks: @session.tracks %>
       </div>
 
       <div class="card mt-12">
