@@ -1,8 +1,0 @@
-<div class="relative px-6 sm:px-0">
-  <section class="relative z-10 max-w-screen-sm mx-auto mt-4 sm:mt-10 px-4 sm:px-8 py-6 bg-white rounded-lg shadow-xl transform -rotate-1 sm:-rotate-2">
-    <h2 class="text-gray-600 text-3xl font-bold">Tausend Dank! 👶</h2>
-    <p class="mt-6 text-gray-700">
-      Ich wünsche ich dir weiterhin viel Spaß mit toniefy.
-    </p>
-  </section>
-</div>

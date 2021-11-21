@@ -6,7 +6,6 @@
     <div class="space-x-8">
       <%= if @current_user do %>
         <%= live_patch "Meine Bibliothek", to: Routes.library_index_path(@socket, :index), class: active_class(@uri.path, Routes.library_index_path(@socket, :index), "header__nav-link", "header__nav-link--active") %>
-        <%= link "Henris Spardose", to: Routes.page_path(@socket, :donate), class: active_class(@uri.path, Routes.page_path(@socket, :donate), "header__nav-link", "header__nav-link--active") %>
         <%= link "Einstellungen", to: Routes.user_settings_path(@socket, :edit), class: "header__nav-link" %>
         <%= link "Logout", to: Routes.user_session_path(@socket, :delete), method: :delete, class: "header__nav-link" %>
         <% else %>
@@ -20,7 +19,5 @@
   <%= @inner_content %>
 </main>
 <footer class="flex justify-center sm:justify-end items-end px-4 py-6 mt-8 mx-auto space-x-6 max-w-screen-md">
-  <p class="text-sm"><%= link "Datenschutz", to: Routes.page_path(@socket, :privacy), class: "footer__link" %></p>
-  <p class="text-sm"><%= link "Kontakt", to: "mailto:hi@toniefy.me?subject=Toniefy Kontakt", class: "footer__link" %></p>
   <p class="font-semibold text-sm text-gray-400">toniefy <span class="text-primary-main">|</span> 2021</p>
 </footer>

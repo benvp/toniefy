@@ -139,7 +139,7 @@
 
   <h2 class="mt-6 heading-2"><%= @playlist.title %></h2>
 
-  <%= live_component @socket, PlaylistComponent, tracks: @playlist.tracks %>
+  <%= live_component PlaylistComponent, tracks: @playlist.tracks %>
 
   <div class="mt-4 mr-1 text-right">
     <button data-confirm="Bist du dir sicher?" phx-click="delete-playlist" type="button" class="link-secondary">
