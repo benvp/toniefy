@@ -4,7 +4,7 @@ defmodule Toniex.MixProject do
   def project do
     [
       app: :toniex,
-      version: "1.2.2",
+      version: "1.3",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
