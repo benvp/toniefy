@@ -84,5 +84,5 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :ueberauth, Ueberauth.Strategy.Spotify.OAuth,
-  client_id: "6d33a8a4ea6642dcbdac95a996d208cc",
-  client_secret: "a0c31d6543554d4cacea54efd5d8c52a"
+  client_id: "your-spotify-client-id",
+  client_secret: "your-spotify-client-secret"
