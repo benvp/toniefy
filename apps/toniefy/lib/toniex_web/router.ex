@@ -21,9 +21,6 @@ defmodule ToniexWeb.Router do
     pipe_through :browser
 
     get "/record", RecordController, :index
-    get "/privacy", PageController, :privacy
-    get "/piggy-bank", PageController, :donate
-    get "/piggy-bank/thank-you", PageController, :donate_success
   end
 
   scope "/", ToniexWeb do
