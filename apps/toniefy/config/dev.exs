@@ -34,8 +34,8 @@ config :toniex, ToniexWeb.Endpoint,
   ]
 
 config :toniex, Toniex.Recorder,
-  url: "https://f5f6db8b4967.eu.ngrok.io",
-  docker_image_name: "toniex-recorder:1.0.2"
+  url: "https://f531-2001-9e8-4336-e700-5d38-84c-7958-a2ef.eu.ngrok.io/login",
+  docker_image_name: "toniex-recorder:1.0.4"
 
 # ## SSL Support
 #
@@ -84,5 +84,5 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :ueberauth, Ueberauth.Strategy.Spotify.OAuth,
-  client_id: "your-spotify-client-id",
-  client_secret: "your-spotify-client-secret"
+  client_id: "6d33a8a4ea6642dcbdac95a996d208cc",
+  client_secret: "a0c31d6543554d4cacea54efd5d8c52a"
