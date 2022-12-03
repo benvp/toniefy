@@ -39,7 +39,7 @@ config :phoenix, :json_library, Jason
 config :ueberauth, Ueberauth,
   providers: [
     spotify:
-      {Ueberauth.Strategy.Spotify, [default_scope: "user-read-email,user-read-private,streaming"]},
+      {Ueberauth.Strategy.Spotify, [default_scope: "user-read-email,user-read-private,streaming,user-modify-playback-state"]},
     tonies: {Ueberauth.Strategy.Tonies, [callback_methods: ["POST"]]}
   ]
 
