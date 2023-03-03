@@ -4,8 +4,8 @@ defmodule ToniexRecorder.MixProject do
   def project do
     [
       app: :toniex_recorder,
-      version: "1.0.4",
-      elixir: "~> 1.11",
+      version: "1.0.5",
+      elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -25,7 +25,7 @@ defmodule ToniexRecorder.MixProject do
       {:porcelain, "~> 2.0.3"},
       {:hackney, "~> 1.17.0"},
       {:tesla, "~> 1.4.0", override: true},
-      {:wallaby, "~> 0.29.1", runtime: false}
+      {:wallaby, "~> 0.30.1", runtime: false}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
