@@ -1,0 +1,56 @@
+service: toniefy
+
+image: benvp/toniefy
+
+servers:
+  - 128.140.42.216
+
+registry:
+  server: ghcr.io
+  username: benvp
+  password:
+    - MRSK_REGISTRY_PASSWORD
+
+env:
+  clear:
+    PORT: 3000
+  secret:
+    - SECRET_KEY_BASE
+    - DATABASE_URL
+    - MAILER_API_KEY
+    - SPOTIFY_CLIENT_ID
+    - SPOTIFY_CLIENT_SECRET
+    - TONIEX_RECORDER_DOCKER_IMAGE_NAME
+    - TONIEX_RECORDER_URL
+    - UPLOAD_DIR
+    - HOST
+
+builder:
+  dockerfile: "apps/toniefy/Dockerfile"
+  context: "apps/toniefy"
+  args:
+    UPLOAD_DIR: ./storage/uploads
+  remote:
+    arch: amd64
+    host: ssh://root@128.140.42.216
+
+volumes:
+  - "/var/run/docker.sock:/var/run/docker.sock"
+  - "/storage/uploads:/app/storage/uploads"
+
+accessories:
+  postgres:
+    image: postgres:15.3
+    host: 128.140.42.216
+    port: 5432
+    env:
+      secret:
+        - POSTGRES_PASSWORD
+        - POSTGRES_DB
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+
+healthcheck:
+  path: /login
+  interval: 20s
+

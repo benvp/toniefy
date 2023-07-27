@@ -1,0 +1,5 @@
+{
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/deployphp/deployer/master/src/schema.json": "file:///Users/benvp/Development/toniefy/config/deploy.yml"
+  }
+}
