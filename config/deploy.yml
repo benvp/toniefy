@@ -51,6 +51,6 @@ accessories:
       - /var/lib/postgresql/data:/var/lib/postgresql/data
 
 healthcheck:
-  path: /login
-  interval: 20s
+  path: /
+  interval: 10s
 

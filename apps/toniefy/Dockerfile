@@ -94,6 +94,7 @@ RUN chown nobody /app
 
 RUN usermod -aG docker nobody
 
+
 # set runner ENV
 ENV MIX_ENV="prod"
 
