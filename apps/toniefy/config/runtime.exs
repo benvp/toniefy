@@ -28,7 +28,8 @@ config :toniex, ToniexWeb.Endpoint,
     port: String.to_integer(System.get_env("PORT") || "4000"),
     transport_options: [socket_opts: [:inet6]]
   ],
-  secret_key_base: secret_key_base
+  secret_key_base: secret_key_base,
+  check_origin: ["https://tf.vp.solutions"]
 
 config :toniex, Toniex.Recorder,
   url: System.get_env("TONIEX_RECORDER_URL"),
@@ -40,11 +41,7 @@ config :ueberauth, Ueberauth.Strategy.Spotify.OAuth,
 
 config :toniex, Toniex.Mailer,
   adapter: Bamboo.SendGridAdapter,
-  api_key:
-    System.get_env("MAILER_API_KEY") ||
-      raise("""
-      environment variable MAILER_API_KEY is missing.
-      """)
+  api_key: System.get_env("MAILER_API_KEY")
 
 # ## Using releases (Elixir v1.9+)
 #
