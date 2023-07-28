@@ -23,13 +23,16 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
+host = System.get_env("PHX_HOST") || "example.com"
+port = String.to_integer(System.get_env("PORT") || "4000")
+
 config :toniex, ToniexWeb.Endpoint,
+  url: [host: host, port: 443, scheme: "https"],
   http: [
-    port: String.to_integer(System.get_env("PORT") || "4000"),
+    port: port,
     transport_options: [socket_opts: [:inet6]]
   ],
-  secret_key_base: secret_key_base,
-  check_origin: ["https://tf.vp.solutions"]
+  secret_key_base: secret_key_base
 
 config :toniex, Toniex.Recorder,
   url: System.get_env("TONIEX_RECORDER_URL"),
