@@ -90,18 +90,20 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 WORKDIR "/app"
-RUN chown nobody /app
 
-RUN usermod -aG docker nobody
+RUN addgroup --system --gid 1024 beam
+RUN adduser --system --uid 1024 phoenix
+RUN usermod -aG docker,beam phoenix
 
+RUN chown phoenix:beam /app
 
 # set runner ENV
 ENV MIX_ENV="prod"
 
 # Only copy the final release from the build stage
-COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/toniex ./
+COPY --from=builder --chown=phoenix:beam /app/_build/${MIX_ENV}/rel/toniex ./
 
-USER nobody
+USER phoenix
 
 EXPOSE 3000
 
