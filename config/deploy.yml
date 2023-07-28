@@ -8,7 +8,7 @@ servers:
 labels:
   traefik.http.routers.toniefy.rule: Host(`tf.vp.solutions`)
   traefik.http.routers.toniefy_secure.entrypoints: websecure
-  traefik.http.routers.toniefy_secure.rule: Host(`tf.vp.solutions.com`)
+  traefik.http.routers.toniefy_secure.rule: Host(`tf.vp.solutions`)
   traefik.http.routers.toniefy_secure.tls.certresolver: letsencrypt
 
 traefik:
