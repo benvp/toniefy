@@ -24,7 +24,6 @@ env:
     - TONIEX_RECORDER_DOCKER_IMAGE_NAME
     - TONIEX_RECORDER_URL
     - UPLOAD_DIR
-    - HOST
 
 builder:
   dockerfile: "apps/toniefy/Dockerfile"
