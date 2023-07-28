@@ -19,6 +19,7 @@ traefik:
       - "/letsencrypt/acme.json:/letsencrypt/acme.json"
   args:
     entryPoints.web.address: ":80"
+    entryPoints.web.http.redirections.entryPoint.to: websecure
     entryPoints.web.http.redirections.entryPoint.scheme: https
     entryPoints.web.http.redirections.entrypoint.permanent: true
     entryPoints.websecure.address: ":443"
