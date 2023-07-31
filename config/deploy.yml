@@ -3,7 +3,7 @@ service: toniefy
 image: benvp/toniefy
 
 servers:
-  - 128.140.42.216
+  - s03.benvp.co
 
 registry:
   server: ghcr.io
@@ -14,34 +14,34 @@ registry:
 env:
   clear:
     PORT: 3000
-    PHX_HOST: tf.vp.solutions
+    PHX_HOST: tf.benvp.co
+    UPLOAD_DIR: /app/storage/uploads
+    TONIEX_RECORDER_URL: https://tf.benvp.co
+    TONIEX_RECORDER_DOCKER_IMAGE_NAME: toniex_recorder:1.0.5
   secret:
     - SECRET_KEY_BASE
     - DATABASE_URL
     - MAILER_API_KEY
     - SPOTIFY_CLIENT_ID
     - SPOTIFY_CLIENT_SECRET
-    - TONIEX_RECORDER_DOCKER_IMAGE_NAME
-    - TONIEX_RECORDER_URL
-    - UPLOAD_DIR
 
 builder:
   dockerfile: "apps/toniefy/Dockerfile"
   context: "apps/toniefy"
   args:
-    UPLOAD_DIR: ./storage/uploads
+    UPLOAD_DIR: /app/storage/uploads
   remote:
     arch: amd64
-    host: ssh://root@128.140.42.216
+    host: ssh://root@s03.benvp.co
 
 volumes:
   - "/var/run/docker.sock:/var/run/docker.sock"
-  - "/storage/uploads:/app/storage/uploads"
+  - "/storage/toniefy/uploads:/app/storage/uploads"
 
 accessories:
   postgres:
     image: postgres:15.3
-    host: 128.140.42.216
+    host: s03.benvp.co
     port: 5432
     env:
       secret:
@@ -55,9 +55,9 @@ healthcheck:
   interval: 10s
 
 labels:
-  traefik.http.routers.toniefy.rule: Host(`tf.vp.solutions`)
+  traefik.http.routers.toniefy.rule: Host(`tf.benvp.co`)
   traefik.http.routers.toniefy_secure.entrypoints: websecure
-  traefik.http.routers.toniefy_secure.rule: Host(`tf.vp.solutions`)
+  traefik.http.routers.toniefy_secure.rule: Host(`tf.benvp.co`)
   traefik.http.routers.toniefy_secure.tls.certresolver: letsencrypt
 
 traefik:
@@ -72,7 +72,7 @@ traefik:
     entryPoints.web.http.redirections.entryPoint.scheme: https
     entryPoints.web.http.redirections.entrypoint.permanent: true
     entryPoints.websecure.address: ":443"
-    certificatesResolvers.letsencrypt.acme.email: "ben@vp.solutions"
+    certificatesResolvers.letsencrypt.acme.email: "hi@benvp.co"
     certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
     certificatesResolvers.letsencrypt.acme.httpchallenge: true
     certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web
