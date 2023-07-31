@@ -5,6 +5,9 @@ image: benvp/toniefy
 servers:
   - s03.benvp.co
 
+ssh:
+  user: benvp
+
 registry:
   server: ghcr.io
   username: benvp
@@ -32,7 +35,7 @@ builder:
     UPLOAD_DIR: /app/storage/uploads
   remote:
     arch: amd64
-    host: ssh://root@s03.benvp.co
+    host: ssh://benvp@s03.benvp.co
 
 volumes:
   - "/var/run/docker.sock:/var/run/docker.sock"
