@@ -3,7 +3,7 @@ service: toniefy
 image: benvp/toniefy
 
 servers:
-  - s03.benvp.co
+  - s01.benvp.co
 
 ssh:
   user: benvp
@@ -35,7 +35,7 @@ builder:
     UPLOAD_DIR: /app/storage/uploads
   remote:
     arch: amd64
-    host: ssh://benvp@s03.benvp.co
+    host: ssh://benvp@s01.benvp.co
 
 volumes:
   - "/var/run/docker.sock:/var/run/docker.sock"
@@ -44,7 +44,7 @@ volumes:
 accessories:
   postgres:
     image: postgres:15.3
-    host: s03.benvp.co
+    host: s01.benvp.co
     port: 5432
     env:
       secret:
