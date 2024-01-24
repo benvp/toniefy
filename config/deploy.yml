@@ -12,7 +12,7 @@ registry:
   server: ghcr.io
   username: benvp
   password:
-    - MRSK_REGISTRY_PASSWORD
+    - KAMAL_REGISTRY_PASSWORD
 
 env:
   clear:
