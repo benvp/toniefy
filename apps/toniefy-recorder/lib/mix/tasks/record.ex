@@ -88,12 +88,15 @@ defmodule Mix.Tasks.Record do
   defp wait_until_playing(timeout \\ 10_000) do
     receive do
       {:player_updated, player, _prev_player} ->
-        if !player.player_state || player.player_state["paused"] do
-          Logger.debug("Player is not ready. Waiting a bit longer...")
-          wait_until_playing()
-        end
+        Logger.info("wait_until_playing: received player_state=#{inspect(player.player_state)}")
 
-        {:ok, player}
+        if !player.player_state || player.player_state["paused"] do
+          Logger.info("Player is not ready (paused or no state). Waiting a bit longer...")
+          wait_until_playing()
+        else
+          Logger.info("Player is now playing. Proceeding with recording.")
+          {:ok, player}
+        end
 
       {:player_error, error} ->
         {:error, error["message"]}
@@ -112,7 +115,7 @@ defmodule Mix.Tasks.Record do
 
     record_proc = start_recording()
 
-    case wait_until_record_finished(tracks_pid) do
+    case wait_until_record_finished(tracks_pid, _playback_started = false) do
       :ok ->
         # record a bit longer, just to make sure the split
         # later does not exceed the full length of the track
@@ -139,7 +142,7 @@ defmodule Mix.Tasks.Record do
     )
   end
 
-  defp wait_until_record_finished(tracks_pid) do
+  defp wait_until_record_finished(tracks_pid, playback_started) do
     receive do
       {:track_changed, track, _prev_track} ->
         Mix.shell().info("Recording song: #{track["name"]}.")
@@ -150,11 +153,18 @@ defmodule Mix.Tasks.Record do
           nil -> ToniexRecorder.Tracks.put(tracks_pid, build_track(1, track))
         end
 
-        wait_until_record_finished(tracks_pid)
+        wait_until_record_finished(tracks_pid, playback_started)
 
       {:player_updated,
        %{player_state: %{"paused" => paused, "duration" => duration, "position" => position}},
        _prev_player} ->
+        Logger.info(
+          "Player state update: paused=#{paused}, position=#{position}, duration=#{duration}, playback_started=#{playback_started}"
+        )
+
+        # Track whether playback has actually started (position > 0 means audio is playing)
+        playback_started = playback_started || position > 0
+
         # Detect unexpected stop by comparing the current position
         # with the track duration. Anyway, this is not perfectly accurate
         # as sometimes the tracks pauses a few ms before and then sets
@@ -162,8 +172,15 @@ defmodule Mix.Tasks.Record do
         threshold = 300
 
         cond do
-          paused && position == 0 ->
+          # Only consider recording finished if playback actually started and now position is 0
+          paused && position == 0 && playback_started ->
+            Logger.info("Playback finished (paused with position=0 after playback started)")
             :ok
+
+          # Ignore paused && position == 0 if playback hasn't started yet (SDK initialization)
+          paused && position == 0 && !playback_started ->
+            Logger.info("Ignoring paused state with position=0 - playback hasn't started yet")
+            wait_until_record_finished(tracks_pid, playback_started)
 
           paused && position + threshold <= duration ->
             maybe_report_status(
@@ -174,7 +191,7 @@ defmodule Mix.Tasks.Record do
             {:error, :playback_stopped_unexpectedly}
 
           true ->
-            wait_until_record_finished(tracks_pid)
+            wait_until_record_finished(tracks_pid, playback_started)
         end
 
       {:player_error, error} ->

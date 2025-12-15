@@ -4,7 +4,7 @@ defmodule ToniexRecorder.MixProject do
   def project do
     [
       app: :toniex_recorder,
-      version: "1.0.5",
+      version: "1.0.7",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps()
