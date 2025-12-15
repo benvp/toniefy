@@ -78,9 +78,13 @@ RUN mix release
 FROM ${RUNNER_IMAGE}
 
 RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales curl \
-  && apt-get clean && rm -f /var/lib/apt/lists/*_*
+    && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 RUN curl -fsSL "https://get.docker.com" | sh
+
+# Match the docker group GID to the one dokploy uses
+RUN groupdel docker || true
+RUN groupadd -g 988 docker
 
 # Set the locale
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
