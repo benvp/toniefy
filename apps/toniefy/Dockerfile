@@ -22,20 +22,20 @@ ARG RUNNER_IMAGE="debian:${DEBIAN_VERSION}"
 FROM ${BUILDER_IMAGE} as builder
 
 # install build dependencies
-RUN apt-get update -y && apt-get install -y build-essential git curl \
-    && apt-get clean && rm -f /var/lib/apt/lists/*_*
+RUN apt-get update -y && apt-get install -y build-essential git curl tini \
+	&& apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # install node 16
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash \
-    && apt-get install -y nodejs \
-    && npm install -g yarn
+	&& apt-get install -y nodejs \
+	&& npm install -g yarn
 
 # prepare build dir
 WORKDIR /app
 
 # install hex + rebar
 RUN mix local.hex --force && \
-    mix local.rebar --force
+	mix local.rebar --force
 
 # set build ENV
 ENV MIX_ENV="prod"
@@ -78,7 +78,7 @@ RUN mix release
 FROM ${RUNNER_IMAGE}
 
 RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales curl \
-    && apt-get clean && rm -f /var/lib/apt/lists/*_*
+	&& apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 RUN curl -fsSL "https://get.docker.com" | sh
 
@@ -111,4 +111,5 @@ USER phoenix
 
 EXPOSE 3000
 
+ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["/app/bin/server"]
