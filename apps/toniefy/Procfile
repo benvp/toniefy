@@ -1,2 +1,0 @@
-release: _build/prod/rel/toniex/bin/toniex eval "Toniex.Release.migrate"
-web: _build/prod/rel/toniex/bin/toniex start

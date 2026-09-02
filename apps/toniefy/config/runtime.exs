@@ -23,9 +23,13 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
+host = System.get_env("PHX_HOST") || "example.com"
+port = String.to_integer(System.get_env("PORT") || "4000")
+
 config :toniex, ToniexWeb.Endpoint,
+  url: [host: host, port: 443, scheme: "https"],
   http: [
-    port: String.to_integer(System.get_env("PORT") || "4000"),
+    port: port,
     transport_options: [socket_opts: [:inet6]]
   ],
   secret_key_base: secret_key_base
@@ -40,11 +44,7 @@ config :ueberauth, Ueberauth.Strategy.Spotify.OAuth,
 
 config :toniex, Toniex.Mailer,
   adapter: Bamboo.SendGridAdapter,
-  api_key:
-    System.get_env("MAILER_API_KEY") ||
-      raise("""
-      environment variable MAILER_API_KEY is missing.
-      """)
+  api_key: System.get_env("MAILER_API_KEY")
 
 # ## Using releases (Elixir v1.9+)
 #

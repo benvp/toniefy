@@ -13,11 +13,9 @@ defmodule Toniex.Recorder do
   @spec enqueue(Toniex.Accounts.User.t(), binary) ::
           {:error, :invalid_uri | :max_duration_exceeded | any} | {:ok, Oban.Job.t()}
   def enqueue(user, uri_or_url) do
-    client =
-      Accounts.get_session(user, :spotify)
-      |> Spotify.client()
-
-    with true <- spotify_uri_valid?(uri_or_url),
+    with token when is_binary(token) <- Accounts.get_session(user, :spotify),
+         client <- Spotify.client(token),
+         true <- spotify_uri_valid?(uri_or_url),
          uri <- Spotify.to_uri(uri_or_url),
          :ok <- spotify_validate_duration(client, uri) do
       %{
@@ -42,6 +40,7 @@ defmodule Toniex.Recorder do
           other
       end
     else
+      nil -> {:error, :no_spotify_session}
       false -> {:error, :invalid_uri}
       error -> error
     end

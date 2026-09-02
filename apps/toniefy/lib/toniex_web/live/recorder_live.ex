@@ -3,7 +3,7 @@ defmodule ToniexWeb.RecorderLive do
 
   alias Toniex.{Accounts, Recorder, Library}
 
-  @max_playlists 5
+  @max_playlists 20
 
   def mount(_params, session, socket) do
     socket = assign_defaults(session, socket)
@@ -59,7 +59,7 @@ defmodule ToniexWeb.RecorderLive do
           socket
           |> put_flash(
             :info,
-            "Du hat das Maximum von 5 Playlisten erreicht. Bitte lösche zunächst eine Playlist."
+            "Du hat das Maximum von #{@max_playlists} Playlisten erreicht. Bitte lösche zunächst eine Playlist."
           )
           |> push_redirect(to: Routes.library_index_path(socket, :index))
 
@@ -129,6 +129,9 @@ defmodule ToniexWeb.RecorderLive do
     do: "Das Album oder die Playlist darf maximal 89 Minuten lang sein."
 
   defp get_error_message(:not_found), do: "Die URI konnte nicht gefunden werden."
+
+  defp get_error_message(:no_spotify_session),
+    do: "Deine Spotify Verbindung ist abgelaufen. Bitte verbinde dein Spotify Konto erneut."
 
   defp get_error_message(_reason),
     do: "Oh nein. Es ist ein Fehler aufgetreten. Bitte versuche es nochmal."

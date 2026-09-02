@@ -4,31 +4,31 @@ defmodule ToniexWeb.Router do
   import ToniexWeb.UserAuth
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout, {ToniexWeb.LayoutView, :root}
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-    plug :fetch_current_user
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, {ToniexWeb.LayoutView, :root})
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+    plug(:fetch_current_user)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", ToniexWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/record", RecordController, :index
+    get("/record", RecordController, :index)
   end
 
   scope "/", ToniexWeb do
-    pipe_through :api
+    pipe_through(:api)
 
-    post "/record", RecordController, :upload
-    put "/record/status", RecordController, :status
-    get "/record/token", RecordController, :token
+    post("/record", RecordController, :upload)
+    put("/record/status", RecordController, :status)
+    get("/record/token", RecordController, :token)
   end
 
   # Enables LiveDashboard only for development
@@ -41,64 +41,64 @@ defmodule ToniexWeb.Router do
   if Mix.env() in [:dev, :test] do
     import Phoenix.LiveDashboard.Router
 
-    forward "/sent_emails", Bamboo.SentEmailViewerPlug
+    forward("/sent_emails", Bamboo.SentEmailViewerPlug)
 
     scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: ToniexWeb.Telemetry
+      pipe_through(:browser)
+      live_dashboard("/dashboard", metrics: ToniexWeb.Telemetry)
     end
   end
 
   ## Authentication routes
 
   scope "/", ToniexWeb do
-    pipe_through [:browser, :redirect_if_user_is_authenticated]
+    pipe_through([:browser, :redirect_if_user_is_authenticated])
 
     # we disable registration for now
     # get "/register", UserRegistrationController, :new
     # post "/register", UserRegistrationController, :create
 
-    get "/login", UserSessionController, :new
-    post "/login", UserSessionController, :create
-    get "/reset-password", UserResetPasswordController, :new
-    post "/reset-password", UserResetPasswordController, :create
-    get "/reset-password/:token", UserResetPasswordController, :edit
-    put "/reset-password/:token", UserResetPasswordController, :update
+    get("/login", UserSessionController, :new)
+    post("/login", UserSessionController, :create)
+    get("/reset-password", UserResetPasswordController, :new)
+    post("/reset-password", UserResetPasswordController, :create)
+    get("/reset-password/:token", UserResetPasswordController, :edit)
+    put("/reset-password/:token", UserResetPasswordController, :update)
   end
 
   live_session :authenticated, on_mount: [{ToniexWeb.LiveAuth, :require_authenticated_user}] do
     scope "/", ToniexWeb do
-      pipe_through [:browser, :require_authenticated_user]
+      pipe_through([:browser, :require_authenticated_user])
 
-      live "/", PageLive, :index
+      live("/", PageLive, :index)
 
-      get "/me", UserSettingsController, :edit
-      put "/me/change-password", UserSettingsController, :update
-      put "/me/change-email", UserSettingsController, :update
-      get "/me/confirm-email/:token", UserSettingsController, :confirm_email
-      delete "/me/disconnect-service", UserSettingsController, :disconnect_service
+      get("/me", UserSettingsController, :edit)
+      put("/me/change-password", UserSettingsController, :update)
+      put("/me/change-email", UserSettingsController, :update)
+      get("/me/confirm-email/:token", UserSettingsController, :confirm_email)
+      delete("/me/disconnect-service", UserSettingsController, :disconnect_service)
 
-      live "/library", LibraryLive.Index, :index
-      live "/library/record", RecorderLive
-      live "/library/record/review", ReviewSessionLive
-      live "/library/:id", LibraryLive.Index, :show
+      live("/library", LibraryLive.Index, :index)
+      live("/library/record", RecorderLive)
+      live("/library/record/review", ReviewSessionLive)
+      live("/library/:id", LibraryLive.Index, :show)
     end
   end
 
   scope "/", ToniexWeb do
-    pipe_through [:browser]
+    pipe_through([:browser])
 
-    delete "/users/log_out", UserSessionController, :delete
-    get "/users/confirm", UserConfirmationController, :new
-    post "/users/confirm", UserConfirmationController, :create
-    get "/users/confirm/:token", UserConfirmationController, :confirm
+    delete("/users/log_out", UserSessionController, :delete)
+    get("/users/confirm", UserConfirmationController, :new)
+    post("/users/confirm", UserConfirmationController, :create)
+    get("/users/confirm/:token", UserConfirmationController, :confirm)
   end
 
   scope "/auth", ToniexWeb do
-    pipe_through [:browser, :require_authenticated_user]
+    pipe_through([:browser, :require_authenticated_user])
 
-    get "/:provider", UserSessionController, :request
-    get "/:provider/callback", UserSessionController, :callback
-    post "/:provider/callback", UserSessionController, :callback
+    get("/:provider", UserSessionController, :request)
+    get("/:provider/callback", UserSessionController, :callback)
+    post("/:provider/callback", UserSessionController, :callback)
   end
 end
