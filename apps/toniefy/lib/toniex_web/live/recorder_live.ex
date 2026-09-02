@@ -130,6 +130,9 @@ defmodule ToniexWeb.RecorderLive do
 
   defp get_error_message(:not_found), do: "Die URI konnte nicht gefunden werden."
 
+  defp get_error_message(:no_spotify_session),
+    do: "Deine Spotify Verbindung ist abgelaufen. Bitte verbinde dein Spotify Konto erneut."
+
   defp get_error_message(_reason),
     do: "Oh nein. Es ist ein Fehler aufgetreten. Bitte versuche es nochmal."
 end

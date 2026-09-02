@@ -12,6 +12,8 @@ defmodule Toniex.Accounts.Session do
   alias Toniex.Clients.{Spotify, Tonies}
   alias Toniex.Repo
 
+  require Logger
+
   def get_session_token(user, service) when service in [:spotify, :tonies] do
     credential = Accounts.get_credential_by_provider(user, service)
 
@@ -34,15 +36,22 @@ defmodule Toniex.Accounts.Session do
   end
 
   defp refresh_credential(%Credential{} = credential, :spotify) do
-    token = Spotify.get_token(credential.refresh_token)
+    case Spotify.get_token(credential.refresh_token) do
+      {:error, res} ->
+        Logger.warn("Could not refresh spotify credential: #{inspect(res.body)}")
 
-    expires_at = DateTime.utc_now() |> DateTime.add(token.expires_in, :second)
+        {:error, :unknown}
 
-    update_credential(credential, %{
-      access_token: token.access_token,
-      expires_at: expires_at,
-      scopes: token.scope
-    })
+      token ->
+        expires_at = DateTime.utc_now() |> DateTime.add(token.expires_in, :second)
+
+        update_credential(credential, %{
+          access_token: token.access_token,
+          expires_at: expires_at,
+          refresh_token: token.refresh_token,
+          scopes: token.scope
+        })
+    end
   end
 
   defp refresh_credential(%Credential{} = credential, :tonies) do

@@ -1,11 +1,20 @@
 defmodule ToniexWeb.UserSessionController do
   use ToniexWeb, :controller
 
+  plug :put_oauth_state when action in [:request]
   plug Ueberauth
 
   alias Toniex.Accounts
   alias ToniexWeb.UserAuth
   alias Ueberauth.Strategy.Helpers
+
+  # Ueberauth sends an empty `state=` when none is given, which makes Spotify's
+  # /authorize endpoint respond with a 500 error page.
+  defp put_oauth_state(conn, _opts) do
+    state = Base.url_encode64(:crypto.strong_rand_bytes(16), padding: false)
+
+    %{conn | params: Map.put_new(conn.params, "state", state)}
+  end
 
   def new(conn, _params) do
     render(conn, "new.html", error_message: nil)

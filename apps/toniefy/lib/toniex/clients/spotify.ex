@@ -17,12 +17,20 @@ defmodule Toniex.Clients.Spotify do
         }
       )
 
-    %{
-      access_token: res.body["access_token"],
-      expires_in: res.body["expires_in"],
-      token_type: res.body["token_type"],
-      scope: res.body["scope"]
-    }
+    case res.status do
+      200 ->
+        %{
+          access_token: res.body["access_token"],
+          expires_in: res.body["expires_in"],
+          # Spotify may rotate the refresh token, in that case it must be persisted.
+          refresh_token: res.body["refresh_token"] || refresh_token,
+          token_type: res.body["token_type"],
+          scope: res.body["scope"]
+        }
+
+      _ ->
+        {:error, res}
+    end
   end
 
   def client(token) do
