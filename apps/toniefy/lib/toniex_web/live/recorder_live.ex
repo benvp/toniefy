@@ -3,7 +3,7 @@ defmodule ToniexWeb.RecorderLive do
 
   alias Toniex.{Accounts, Recorder, Library}
 
-  @max_playlists 5
+  @max_playlists 20
 
   def mount(_params, session, socket) do
     socket = assign_defaults(session, socket)
@@ -59,7 +59,7 @@ defmodule ToniexWeb.RecorderLive do
           socket
           |> put_flash(
             :info,
-            "Du hat das Maximum von 5 Playlisten erreicht. Bitte lösche zunächst eine Playlist."
+            "Du hat das Maximum von #{@max_playlists} Playlisten erreicht. Bitte lösche zunächst eine Playlist."
           )
           |> push_redirect(to: Routes.library_index_path(socket, :index))
 
